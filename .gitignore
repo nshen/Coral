@@ -2,6 +2,7 @@
 bin/*
 docs/*
 swc/*
+Coral.as3proj
 
 # Eclipse
 .settings/*
