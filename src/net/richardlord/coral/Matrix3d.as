@@ -579,6 +579,36 @@ package net.richardlord.coral
 			return this;
 		}
 
+		public function transpose():Matrix3d
+		{
+			const o12:Number = n12;
+			const o13:Number = n13;
+			const o14:Number = n14;
+			const o21:Number = n21;
+			const o23:Number = n23;
+			const o24:Number = n24;
+			const o31:Number = n31;
+			const o32:Number = n32;
+			const o34:Number = n34;
+			const o41:Number = n41;
+			const o42:Number = n42;
+			const o43:Number = n43;
+
+			n12 = o21;
+			n13 = o31;
+			n14 = o41;
+			n21 = o12;
+			n23 = o32;
+			n24 = o42;
+			n31 = o13;
+			n32 = o23;
+			n34 = o43;
+			n41 = o14;
+			n42 = o24;
+			n43 = o34;
+			
+			return this;
+		}
 		/**
 		 * Append a rotation transformation to this matrix, applying the 
 		 * rotation after the transformations already in this matrix.
@@ -617,7 +647,7 @@ package net.richardlord.coral
 			var ay : Number;
 			var az : Number;
 			var lenSq : Number = axis.lengthSquared;
-			if( Math.abs( lenSq - 1 ) < 0.00001 ) 
+			if( Math.abs( lenSq - 1 ) < 0.00001 )  //axis is normalized
 			{
 				ax = axis.x;
 				ay = axis.y;
