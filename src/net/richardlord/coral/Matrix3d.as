@@ -659,86 +659,9 @@ package net.richardlord.coral
 		 */
 		public function appendRotation( angle : Number, axis : Vector3d, pivotPoint : Point3d = null ) : Matrix3d
 		{
-			if ( angle == 0 )
-			{
-				return this;
-			}
-
-			const o11 : Number = n11;
-			const o12 : Number = n12;
-			const o13 : Number = n13;
-			const o14 : Number = n14;
-			const o21 : Number = n21;
-			const o22 : Number = n22;
-			const o23 : Number = n23;
-			const o24 : Number = n24;
-			const o31 : Number = n31;
-			const o32 : Number = n32;
-			const o33 : Number = n33;
-			const o34 : Number = n34;
-			const o41 : Number = n41;
-			const o42 : Number = n42;
-			const o43 : Number = n43;
-			const o44 : Number = n44;
-
-			var ax : Number;
-			var ay : Number;
-			var az : Number;
-			var lenSq : Number = axis.lengthSquared;
-			if( Math.abs( lenSq - 1 ) < 0.00001 )  //axis is normalized
-			{
-				ax = axis.x;
-				ay = axis.y;
-				az = axis.z;
-			}
-			else
-			{
-				var factor : Number = 1 / Math.sqrt( lenSq );
-				ax = axis.x * factor;
-				ay = axis.y * factor;
-				az = axis.z * factor;
-			}
-
-			const sin : Number = Math.sin( angle );
-			const cos : Number = Math.cos( angle );
-			const oneMinCos : Number = 1 - cos;
-			
-			var p11 : Number = cos + ax * ax * oneMinCos;
-			var p12 : Number = ax * ay * oneMinCos - az * sin;
-			var p13 : Number = ax * az * oneMinCos + ay * sin;
-			var p14 : Number = 0;
-			var p21 : Number = ax * ay * oneMinCos + az * sin;
-			var p22 : Number = cos + ay * ay * oneMinCos;
-			var p23 : Number = ay * az * oneMinCos - ax * sin;
-			var p24 : Number = 0;
-			var p31 : Number = ax * az * oneMinCos - ay * sin;
-			var p32 : Number = ay * az * oneMinCos + ax * sin;
-			var p33 : Number = cos + az * az * oneMinCos;
-			var p34 : Number = 0;
-			
-			if( pivotPoint )
-			{
-				p14 = - pivotPoint.x * ( p11 - 1 ) - pivotPoint.y * p12 - pivotPoint.z * p13;
-				p24 = - pivotPoint.x * p21 - pivotPoint.y * ( p22 - 1 ) - pivotPoint.z * p23;
-				p34 = - pivotPoint.x * p31 - pivotPoint.y * p32 - pivotPoint.z * ( p33 - 1 );
-			}
-
-			n11 = p11 * o11 + p12 * o21 + p13 * o31 + p14 * o41;
-			n12 = p11 * o12 + p12 * o22 + p13 * o32 + p14 * o42;
-			n13 = p11 * o13 + p12 * o23 + p13 * o33 + p14 * o43;
-			n14 = p11 * o14 + p12 * o24 + p13 * o34 + p14 * o44;
-			n21 = p21 * o11 + p22 * o21 + p23 * o31 + p24 * o41;
-			n22 = p21 * o12 + p22 * o22 + p23 * o32 + p24 * o42;
-			n23 = p21 * o13 + p22 * o23 + p23 * o33 + p24 * o43;
-			n24 = p21 * o14 + p22 * o24 + p23 * o34 + p24 * o44;
-			n31 = p31 * o11 + p32 * o21 + p33 * o31 + p34 * o41;
-			n32 = p31 * o12 + p32 * o22 + p33 * o32 + p34 * o42;
-			n33 = p31 * o13 + p32 * o23 + p33 * o33 + p34 * o43;
-			n34 = p31 * o14 + p32 * o24 + p33 * o34 + p34 * o44;
-
-			return this;
+			return append(newRotation(angle, axis, pivotPoint));
 		}
-
+	
 		/**
 		 * Append a coordinate system transformation such that the vectors
 		 * indicated are transformed to the x, y and z axes. The vectors need
