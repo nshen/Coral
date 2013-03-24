@@ -86,43 +86,81 @@ package net.richardlord.coral
 		 */
 		public static function newRotation( angle : Number, axis : Vector3d, pivotPoint : Point3d = null ) : Matrix3d
 		{
-			if ( angle == 0 )
+			if ( angle == 0 || axis.isZero())
 			{
 				return new Matrix3d();
 			}
-			var ax : Number;
-			var ay : Number;
-			var az : Number;
-			var lenSq : Number = axis.lengthSquared;
-			if( Math.abs( lenSq - 1 ) < 0.00001 ) 
-			{
-				ax = axis.x;
-				ay = axis.y;
-				az = axis.z;
-			}
-			else
-			{
-				var factor : Number = 1 / Math.sqrt( lenSq );
-				ax = axis.x * factor;
-				ay = axis.y * factor;
-				az = axis.z * factor;
-			}
-
+			
 			const sin : Number = Math.sin( angle );
 			const cos : Number = Math.cos( angle );
-			const oneMinCos : Number = 1 - cos;
-			
 			var m:Matrix3d = new Matrix3d();
 			
-			m.n11 = cos + ax * ax * oneMinCos;
-			m.n12 = ax * ay * oneMinCos - az * sin;
-			m.n13 = ax * az * oneMinCos + ay * sin;
-			m.n21 = ax * ay * oneMinCos + az * sin;
-			m.n22 = cos + ay * ay * oneMinCos;
-			m.n23 = ay * az * oneMinCos - ax * sin;
-			m.n31 = ax * az * oneMinCos - ay * sin;
-			m.n32 = ay * az * oneMinCos + ax * sin;
-			m.n33 = cos + az * az * oneMinCos;
+			if (axis.y == 0 && axis.z == 0) // rotate x axis only
+			{
+				m.n11 = 1;
+				m.n12 = 0;
+				m.n13 = 0;
+				m.n21 = 0;
+				m.n22 = cos;
+				m.n23 = -sin;
+				m.n31 = 0;
+				m.n32 = sin;
+				m.n33 = cos;
+				
+			}else if ( axis.x == 0 && axis.z == 0 ) // rotate y axis only
+			{
+				m.n11 = cos;
+				m.n12 = 0;
+				m.n13 = sin;
+				m.n21 = 0;
+				m.n22 = 1;
+				m.n23 = 0;
+				m.n31 = -sin;
+				m.n32 = 0;
+				m.n33 = cos;
+				
+			}else if ( axis.x == 0 && axis.y == 0) //rotate z axis only
+			{
+				m.n11 = cos;
+				m.n12 = -sin;
+				m.n13 = 0;
+				m.n21 = sin;
+				m.n22 = cos;
+				m.n23 = 0;
+				m.n31 = 0;
+				m.n32 = 0
+				m.n33 = 1
+				
+			}else
+			{
+				var ax : Number;
+				var ay : Number;
+				var az : Number;
+				var lenSq : Number = axis.lengthSquared;
+				if( Math.abs( lenSq - 1 ) < 0.00001 ) 
+				{
+					ax = axis.x;
+					ay = axis.y;
+					az = axis.z;
+				}
+				else
+				{
+					var factor : Number = 1 / Math.sqrt( lenSq );
+					ax = axis.x * factor;
+					ay = axis.y * factor;
+					az = axis.z * factor;
+				}
+				const oneMinCos : Number = 1 - cos;
+				m.n11 = cos + ax * ax * oneMinCos;
+				m.n12 = ax * ay * oneMinCos - az * sin;
+				m.n13 = ax * az * oneMinCos + ay * sin;
+				m.n21 = ax * ay * oneMinCos + az * sin;
+				m.n22 = cos + ay * ay * oneMinCos;
+				m.n23 = ay * az * oneMinCos - ax * sin;
+				m.n31 = ax * az * oneMinCos - ay * sin;
+				m.n32 = ay * az * oneMinCos + ax * sin;
+				m.n33 = cos + az * az * oneMinCos;
+			}
 			
 			if( pivotPoint )
 			{
