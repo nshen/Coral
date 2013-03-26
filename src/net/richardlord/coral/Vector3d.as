@@ -63,6 +63,20 @@ package net.richardlord.coral
 		{
 			return new Vector3d( 0, 0, 1 );
 		}
+		
+		/**
+		 * Get angle between two vectors
+		 * @param	va vector a
+		 * @param	vb vector b
+		 * @param	isNormalized	if both va and vb are normalized vector,compute will be quicker. default is false
+		 * @return  angle between two vectors in radians
+		 */
+		public static function angleBetween(va:Vector3d , vb:Vector3d , isNormalized:Boolean = false) :Number
+		{
+			if (isNormalized)
+				return Math.acos(va.dotProduct(vb));
+			return Math.acos(va.dotProduct(vb) / (va.length * vb.length));
+		}
 
 		/**
 		 * The x coordinate of the vector.
