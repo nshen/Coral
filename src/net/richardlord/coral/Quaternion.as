@@ -47,6 +47,50 @@ package net.richardlord.coral
 			return new Quaternion( 1, 0, 0, 0 );
 		}
 
+		public static function difference(q0:Quaternion , q1:Quaternion):Quaternion
+		{
+			return q1.postMultiply(q0.inverse());
+		}
+		
+		
+		public static function slerp(q0:Quaternion , q1:Quaternion, percent:Number ,result:Quaternion = null):Quaternion
+		{
+			// Idont know why not is this method get the same result.
+			//var quaternion:Quaternion = difference(q0, q1);
+			//quaternion.exponentiation(percent);
+			//return quaternion.preMultiply(q0);
+			
+			var w0:Number = q0.w , x0:Number = q0.x, y0:Number = q0.y, z0:Number = q0.z;
+			var w1:Number = q1.w , x1:Number = q1.x, y1:Number = q1.y, z1:Number = q1.z;
+			
+			result ||= new Quaternion();
+			var cosOmega:Number = q0.dotProduct(q1); 
+			 
+			if ( cosOmega < 0)
+			{
+				w1 = -w1;
+				x1 = -x1;
+				y1 = -y1;
+				z1 = -z1;
+				cosOmega = -cosOmega;
+			}
+			var k0:Number , k1:Number;
+			if (cosOmega > 0.9999) // very close , to protect against divide-by-zero
+			{
+				k0 = 1 - percent;
+				k1 = percent;
+			}else
+			{
+				var sinOmega:Number = Math.sqrt(1 - cosOmega * cosOmega); // sin^2 + cos^2 = 1;
+				var omega:Number = Math.atan(sinOmega / cosOmega);
+				var oneOverSinOmega:Number = 1 / sinOmega;
+				k0 = Math.sin((1 - percent) * omega) * oneOverSinOmega;
+				k1 = Math.sin(percent * omega) * oneOverSinOmega;
+			} 
+			return result.reset(w0 * k0 + w1 * k1, x0 * k0 + x1 * k1, y0 * k0 + y1 * k1, z0 * k0 + z1 * k1);
+			
+		}
+		
 		/**
 		 * The w coordinate of the quaternion.
 		 */
@@ -363,6 +407,7 @@ package net.richardlord.coral
 
 		/**
 		 * The magnitude of this quaternion.
+		 * *rotation quaternion's magnitude always equal 1
 		 */
 		public function get magnitude() : Number
 		{
@@ -391,6 +436,7 @@ package net.richardlord.coral
 
 		/**
 		 * The conjugate of this quaternion.
+		 * * rotation quaternion's conjugate is equal to it's inverse but much faseter to compute
 		 * 
 		 * @param result The quaternion to hold the result of the conjugate. If
 		 * no quaternion is passed, a new quaternion is created.
@@ -520,6 +566,23 @@ package net.richardlord.coral
 			result.y = y * s;
 			result.z = z * s;
 			return result;
+		}
+		
+		public function exponentiation(exponent:Number):Quaternion
+		{
+			if (Math.abs(w) < 0.9999)
+			{
+				var alpha:Number = Math.acos(w);
+				var newAlpha:Number = alpha * exponent;
+				
+				w = Math.cos(newAlpha);
+				var mult:Number = Math.sin(newAlpha) / Math.sin(alpha);
+				x *= mult;
+				y *= mult;
+				z *= mult;
+				return this;
+			}
+			throw new Error("exponentation error");
 		}
 
 		/**
