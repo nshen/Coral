@@ -378,6 +378,26 @@ package net.richardlord.coral
 			result.z = x * v.y - y * v.x;
 			return result;
 		}
+		/**
+		 * Project this vector onto the v
+		 * 
+		 * @param	v The vector to project onto
+		 * @param	result 
+		 * @param	vIsNormalized if v is normalized then compute will be faster ,default is false
+		 * @return
+		 */
+		public function projectOnto(v:Vector3d, result:Vector3d = null , vIsNormalized:Boolean = false):Vector3d
+		{
+			result ||= new Vector3d();
+			result.assign(v);
+			if (vIsNormalized)
+			{
+				result.scaleBy(this.dotProduct(v));
+				return result;
+			}
+			result.scaleBy(this.dotProduct(v)/v.lengthSquared);
+			return result;
+		}
 
 		/**
 		 * The length of this vector.
