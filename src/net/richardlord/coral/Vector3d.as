@@ -263,14 +263,21 @@ package net.richardlord.coral
 		 * 
 		 * @return A reference to this vector.
 		 */
-		public function incrementBy( v : Vector3d ) : Vector3d
+		public function incrementBy( v : Vector3d ,scale:Number = 1) : Vector3d
 		{
-			x += v.x;
-			y += v.y;
-			z += v.z;
+			if (scale == 1)
+			{
+				x += v.x;
+				y += v.y;
+				z += v.z;
+				return this;
+			}
+			x += (v.x * scale);
+            y += (v.y * scale);
+            z += (v.z * scale);
 			return this;
 		}
-
+		
 		/**
 		 * Subtract another vector from this one.
 		 * 
