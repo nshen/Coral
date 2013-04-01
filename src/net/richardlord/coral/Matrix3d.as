@@ -60,7 +60,7 @@ package net.richardlord.coral
 		{
 			return new Matrix3d( scaleX, 0, 0, 0, 0, scaleY, 0, 0, 0, 0, scaleZ, 0, 0, 0, 0, 1 );
 		}
-
+		
 		/**
 		 * Creates a new Matrix3d for translation.
 		 * 
@@ -182,14 +182,18 @@ package net.richardlord.coral
 		 */
 		public static function newBasisTransform( axisX : Vector3d, axisY : Vector3d, axisZ : Vector3d ) : Matrix3d
 		{
+			//every column is a basis vector
+			
 			var p11 : Number = axisX.x;
-			var p12 : Number = axisY.x;
-			var p13 : Number = axisZ.x;
 			var p21 : Number = axisX.y;
-			var p22 : Number = axisY.y;
-			var p23 : Number = axisZ.y;
 			var p31 : Number = axisX.z;
+
+			var p12 : Number = axisY.x;
+			var p22 : Number = axisY.y;
 			var p32 : Number = axisY.z;
+			
+			var p13 : Number = axisZ.x;
+			var p23 : Number = axisZ.y;
 			var p33 : Number = axisZ.z;
 			
 			var d:Number = ( p11 * p22 - p12 * p21 ) * p33 + ( p13 * p21 - p11 * p23 ) * p32 + ( p12 * p23 - p13 * p22 ) * p31;
@@ -515,6 +519,7 @@ package net.richardlord.coral
 		}
 
 		/**
+		 * m * this
 		 * Add another transformation matrix to this one, applying the new
 		 * transformation after the transformations already in this matrix.
 		 * 
@@ -617,6 +622,11 @@ package net.richardlord.coral
 			return this;
 		}
 
+		/**
+		 * if you know the matrix is orthogonal then you dont need the complexe inverse()method
+		 * because if a matrix is orthogonal, its transpose and inverse are equal
+		 * @return A reference to this matrix
+		 */
 		public function transpose():Matrix3d
 		{
 			const o12:Number = n12;
@@ -733,6 +743,7 @@ package net.richardlord.coral
 		}
 
 		/**
+		 * this * m
 		 * Add another transformation matrix to this one, applying the new
 		 * transformation before the transformations already in this matrix.
 		 * 
@@ -1013,7 +1024,7 @@ package net.richardlord.coral
 		{
 			var d : Number = ( n11 * n22 - n12 * n21 ) * ( n33 * n44 - n34 * n43 ) + ( n13 * n21 - n11 * n23 ) * ( n32 * n44 - n34 * n42 ) + ( n11 * n24 - n14 * n21 ) * ( n32 * n43 - n33 * n42 ) + ( n12 * n23 - n13 * n22 ) * ( n31 * n44 - n34 * n41 ) + ( n14 * n22 - n12 * n24 ) * ( n31 * n43 - n33 * n41 ) + ( n13 * n24 - n14 * n23 ) * ( n31 * n42 - n32 * n41 );
 			if ( d == 0 )
-			{
+			{  //singular matrix have no inverse
 				if( result )
 				{
 					result.n11 = NaN;
@@ -1057,7 +1068,7 @@ package net.richardlord.coral
 			{
 				result = new Matrix3d();
 			}
-			
+			// confactor / determinant
 			result.n11 = det * ( o22 * ( o33 * o44 - o43 * o34 ) - o32 * ( o23 * o44 - o43 * o24 ) + o42 * ( o23 * o34 - o33 * o24 ) ) ;
 			result.n12 = - det * ( o12 * ( o33 * o44 - o43 * o34 ) - o32 * ( o13 * o44 - o43 * o14 ) + o42 * ( o13 * o34 - o33 * o14 ) ) ;
 			result.n13 = det * ( o12 * ( o23 * o44 - o43 * o24 ) - o22 * ( o13 * o44 - o43 * o14 ) + o42 * ( o13 * o24 - o23 * o14 ) ) ;
