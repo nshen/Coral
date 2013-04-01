@@ -23,6 +23,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
+ /****************************************************************************
+  * This is modified version by nshen.net ,see : https://github.com/nshen/Coral
+  ****************************************************************************/
+ 
 package net.richardlord.coral
 {
 	use namespace coral_internal;
@@ -84,7 +89,7 @@ package net.richardlord.coral
 		 * 
 		 * @return The new matrix
 		 */
-		public static function newRotation( angle : Number, axis : Vector3d, pivotPoint : Point3d = null ) : Matrix3d
+		public static function newRotation( angle : Number, axis : Vector3d, pivotPoint : Vector3d = null ) : Matrix3d
 		{
 			if ( angle == 0 || axis.isZero())
 			{
@@ -667,7 +672,7 @@ package net.richardlord.coral
 		 * 
 		 * @return A reference to this matrix
 		 */
-		public function appendRotation( angle : Number, axis : Vector3d, pivotPoint : Point3d = null ) : Matrix3d
+		public function appendRotation( angle : Number, axis : Vector3d, pivotPoint : Vector3d = null ) : Matrix3d
 		{
 			return append(newRotation(angle, axis, pivotPoint));
 		}
@@ -848,7 +853,7 @@ package net.richardlord.coral
 		 * 
 		 * @return A reference to this matrix
 		 */
-		public function prependRotation( angle : Number, axis : Vector3d, pivotPoint : Point3d = null ) : Matrix3d
+		public function prependRotation( angle : Number, axis : Vector3d, pivotPoint : Vector3d = null ) : Matrix3d
 		{
 			if ( angle == 0 )
 			{
@@ -1185,7 +1190,7 @@ package net.richardlord.coral
 		}
 
 		/**
-		 * Transform a Point3d using this matrix, returning a new, transformed point.
+		 * Transform a point using this matrix, returning a new, transformed point.
 		 * 
 		 * @param point The point to transform.
 		 * @param result The point to hold the result of the transform. If
@@ -1193,40 +1198,70 @@ package net.richardlord.coral
 		 * 
 		 * @return The result of the transformation.
 		 */
-		public function transformPoint( point : Point3d, result : Point3d = null ) : Point3d
+		public function transformPoint( point : Vector3d, result : Vector3d = null ) : Vector3d
 		{
 			if ( result == null )
 			{
-				result = new Point3d();
+				result = new Vector3d();
 			}
-			result.x = n11 * point.x + n12 * point.y + n13 * point.z + n14 * point.w;
-			result.y = n21 * point.x + n22 * point.y + n23 * point.z + n24 * point.w;
-			result.z = n31 * point.x + n32 * point.y + n33 * point.z + n34 * point.w;
-			result.w = n41 * point.x + n42 * point.y + n43 * point.z + n44 * point.w;
+			result.x = n11 * point.x + n12 * point.y + n13 * point.z + n14 ;
+			result.y = n21 * point.x + n22 * point.y + n23 * point.z + n24 ;
+			result.z = n31 * point.x + n32 * point.y + n33 * point.z + n34 ;
+			//result.w = n41 * point.x + n42 * point.y + n43 * point.z + n44 ;
 			return result;
 		}
 
 		/**
-		 * Transform a Point3d using this matrix, storing the result in the original 
+		 * Transform a point using this matrix, storing the result in the original 
 		 * point.
 		 * 
 		 * @param point The point to transform.
 		 * 
 		 * @return A reference to the original (now transformed) vector.
 		 */
-		public function transformPointSelf( point : Point3d ) : Point3d
+		public function transformPointSelf( point : Vector3d ) : Vector3d
 		{
 			var x : Number = point.x;
 			var y : Number = point.y;
 			var z : Number = point.z;
-			var w : Number = point.w;
-			point.x = n11 * x + n12 * y + n13 * z + n14 * w;
-			point.y = n21 * x + n22 * y + n23 * z + n24 * w;
-			point.z = n31 * x + n32 * y + n33 * z + n34 * w;
-			point.w = n41 * x + n42 * y + n43 * z + n44 * w;
+			point.x = n11 * x + n12 * y + n13 * z + n14;
+			point.y = n21 * x + n22 * y + n23 * z + n24;
+			point.z = n31 * x + n32 * y + n33 * z + n34;
+			//point.w = n41 * x + n42 * y + n43 * z + n44;
 			return point;
 		}
 
+		/**
+		 * Transform a Vector3d ,but does not include position.
+		 * @param	v
+		 * @param	result
+		 * @return  A reference to the original (now transformed) vector.
+		 */
+		public function transformDirection(v : Vector3d, result : Vector3d = null ) : Vector3d
+		{
+			result ||= new Vector3d();
+			result.x = n11 * v.x + n12 * v.y + n13 * v.z;
+			result.y = n21 * v.x + n22 * v.y + n23 * v.z;
+			result.z = n31 * v.x + n32 * v.y + n33 * v.z;
+			//result.w = n41 * v.x + n42 * v.y + n43 * v.z;
+			return result;
+		}
+		/**
+		 * Transform a Vector3d ,but does not include position.
+		 * @param	v
+		 * @return A reference to the original (now transformed) vector.
+		 */
+		public function transformDirectionSelf(v:Vector3d):Vector3d
+		{
+			var x : Number = v.x;
+			var y : Number = v.y;
+			var z : Number = v.z;
+			v.x = n11 * x + n12 * y + n13 * z;
+			v.y = n21 * x + n22 * y + n23 * z;
+			v.z = n31 * x + n32 * y + n33 * z;
+			//v.w = n41 * x + n42 * y + n43 * z;
+			return v;
+		}
 		/**
 		 * Transform a vector of Vector3d objects using this matrix. The 
 		 * results are returned in a new vector.
@@ -1293,12 +1328,12 @@ package net.richardlord.coral
 		 * 
 		 * @return The vector containing the new transformed points.
 		 */
-		public function transformPoints( points : Vector.<Point3d>, results : Vector.<Point3d> = null ) : Vector.<Point3d>
+		public function transformPoints( points : Vector.<Vector3d>, results : Vector.<Vector3d> = null ) : Vector.<Vector3d>
 		{
 			var length : uint = points.length;
 			if( results == null )
 			{
-				results = new Vector.<Point3d>( length );
+				results = new Vector.<Vector3d>( length );
 			}
 			else
 			{
@@ -1326,9 +1361,9 @@ package net.richardlord.coral
 		 * 
 		 * @return The original vector, which now contains the transformed points.
 		 */
-		public function transformPointsSelf( points : Vector.<Point3d> ) : Vector.<Point3d>
+		public function transformPointsSelf( points : Vector.<Vector3d> ) : Vector.<Vector3d>
 		{
-			for each ( var point:Point3d in points )
+			for each ( var point:Vector3d in points )
 			{
 				transformPointSelf( point );
 			}
@@ -1339,14 +1374,14 @@ package net.richardlord.coral
 		 * The position elements of the matrix. This is the last column of the
 		 * matrix, containing values n14, n24, n34, n44.
 		 */
-		public function get position() : Point3d
+		public function get position() : Vector3d
 		{
-			var p : Point3d = new Point3d( n14, n24, n34 );
+			var p : Vector3d = new Vector3d( n14, n24, n34 );
 			p.w = n44;
 			return p;
 		}
 
-		public function set position( value : Point3d ) : void
+		public function set position( value : Vector3d ) : void
 		{
 			n14 = value.x;
 			n24 = value.y;
