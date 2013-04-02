@@ -17,6 +17,7 @@ h3. Matrix3d :
 * rewrite newRotation and appendRotation method ,then when you rotate only the X or Y or Z axis will be quicker.
 * add a result parameter to toMatrix3d() method.
 * add a determinant33() getter method.
+* add transformDirection() method.
 
 h3. Quaternion :
 
