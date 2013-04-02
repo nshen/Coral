@@ -1016,6 +1016,15 @@ package net.richardlord.coral
 		{
 			return ( n11 * n22 - n12 * n21 ) * ( n33 * n44 - n34 * n43 ) + ( n13 * n21 - n11 * n23 ) * ( n32 * n44 - n34 * n42 ) + ( n11 * n24 - n14 * n21 ) * ( n32 * n43 - n33 * n42 ) + ( n12 * n23 - n13 * n22 ) * ( n31 * n44 - n34 * n41 ) + ( n14 * n22 - n12 * n24 ) * ( n31 * n43 - n33 * n41 ) + ( n13 * n24 - n14 * n23 ) * ( n31 * n42 - n32 * n41 );
 		}
+		
+		/**
+		 * The determinant of the 3*3 matrix
+		 */
+		public function get determinant33():Number
+		{
+			//var d:Number = ( n11 * n22 - n12 * n21 ) * n33 + ( n13 * n21 - n11 * n23 ) * n32 + ( n12 * n23 - n13 * n22 ) * n31;
+			return n11 * (n22 * n33 - n23 * n32) - n12 * (n21 * n33 - n23 * n31) + n13 * (n21 * n32 - n22 * n31);
+		}
 
 		/**
 		 * The inverse of this matrix, or null if no inverse exists
