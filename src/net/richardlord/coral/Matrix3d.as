@@ -632,7 +632,7 @@ package net.richardlord.coral
 		 * because if a matrix is orthogonal, its transpose and inverse are equal
 		 * @return A reference to this matrix
 		 */
-		public function transpose():Matrix3d
+		public function transposeSelf():Matrix3d
 		{
 			const o12:Number = n12;
 			const o13:Number = n13;
@@ -662,6 +662,31 @@ package net.richardlord.coral
 			
 			return this;
 		}
+		
+		/**
+		 * The transpose of this matrix
+		 * @return the transpose of this matrix 
+		 */
+		public function transpose(result:Matrix3d = null):Matrix3d
+		{
+			result ||= new Matrix3d();
+			
+			result.n12 = n21;
+			result.n13 = n31;
+			result.n14 = n41;
+			result.n21 = n12;
+			result.n23 = n32;
+			result.n24 = n42;
+			result.n31 = n13;
+			result.n32 = n23;
+			result.n34 = n43;
+			result.n41 = n14;
+			result.n42 = n24;
+			result.n43 = n34;
+			
+			return result;
+		}
+		
 		/**
 		 * Append a rotation transformation to this matrix, applying the 
 		 * rotation after the transformations already in this matrix.
