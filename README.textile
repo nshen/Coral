@@ -19,6 +19,7 @@ h3. Matrix3d :
 * add a result parameter to toMatrix3d() method.
 * add a determinant33() getter method.
 * add transformDirection() method.
+* change position getter to getPosition(result) method.
 
 h3. Quaternion :
 

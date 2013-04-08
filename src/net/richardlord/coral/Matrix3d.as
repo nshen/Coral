@@ -1408,14 +1408,22 @@ package net.richardlord.coral
 		 * The position elements of the matrix. This is the last column of the
 		 * matrix, containing values n14, n24, n34, n44.
 		 */
-		public function get position() : Vector3d
+		public function getPosition(result:Vector3d = null) : Vector3d
 		{
-			var p : Vector3d = new Vector3d( n14, n24, n34 );
-			p.w = n44;
-			return p;
+			if (result)
+			{
+				result.reset(n14, n24, n34);
+				result.w = n44;
+			}else
+			{
+				result = new Vector3d( n14, n24, n34 );
+				result.w = n44;
+			}
+			
+			return result;
 		}
 
-		public function set position( value : Vector3d ) : void
+		public function setPosition( value : Vector3d ) : void
 		{
 			n14 = value.x;
 			n24 = value.y;
