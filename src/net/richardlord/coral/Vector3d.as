@@ -77,6 +77,15 @@ package net.richardlord.coral
 				return Math.acos(va.dotProduct(vb));
 			return Math.acos(va.dotProduct(vb) / (va.length * vb.length));
 		}
+		
+		/**
+		 * @return  (a X b ). c
+		 */
+		public static function scalarTripleProduct(a:Vector3d , b:Vector3d , c:Vector3d , result:Vector3d = null):Number
+		{
+			result ||= new Vector3d();
+			return a.crossProduct(b, result).dotProduct(c);
+		}
 
 		/**
 		 * The x coordinate of the vector.

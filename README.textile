@@ -10,6 +10,7 @@ h3. Vector3d :
 
 * add angleBetween() static method.
 * add projectOnto() method.
+* add scalarTripleProduct() method.
 * incrementBy method add scale param.
 
 h3. Matrix3d :
